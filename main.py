@@ -15,14 +15,14 @@ class Square:
 
         self.canvas.tag_bind(self.rectangle, "<Button-1>", self.click_square)
 
-    def click_square(self, event):
+    def click_square(self, event) -> str:
         if not self.is_clicked:
             self.canvas.itemconfig(self.rectangle, fill="red")
             self.is_clicked = True
         else:
             self.canvas.itemconfig(self.rectangle, fill="blue")
             self.is_clicked = False
-        print(f"{chr(97+self.row)}{8-self.col}")
+        return f"{chr(97+self.row)}{8-self.col}"
 
 class Board:
     def __init__(self, root: tk.Tk):
