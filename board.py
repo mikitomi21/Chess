@@ -1,5 +1,7 @@
 from constants import *
 import tkinter as tk
+
+
 class Square:
     def __init__(self, canvas: tk.Canvas, row: int, col: int):
         self.canvas = canvas
@@ -36,6 +38,7 @@ class Square:
             self.color = BLACK
 
         return f"{chr(97+self.row)}{8-self.col}"
+
 
 class Board:
     def __init__(self, root: tk.Tk):

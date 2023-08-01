@@ -1,6 +1,7 @@
 import tkinter as tk
 from board import Board
 
+
 def create_app():
     root = tk.Tk()
     root.title("Chess")
