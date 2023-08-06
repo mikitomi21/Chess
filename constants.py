@@ -15,3 +15,5 @@ PLAYER_WHITE = 0
 PLAYER_BLACK = 1
 
 NUMBER_OF_PAWNS = 8
+
+choose_piece = None

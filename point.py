@@ -6,4 +6,4 @@ class Point:
 
     @staticmethod
     def get_position(position: str) -> (int, int):
-        return int(position[1]) - 1, ord(position[0]) - 97
+        return 8 - int(position[1]), ord(position[0]) - 97

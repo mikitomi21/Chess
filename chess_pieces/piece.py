@@ -6,16 +6,16 @@ class Piece(ABC):
     board = None
 
     @abstractmethod
-    def __init__(self, start_position: Point, player: int):
-        self.start_position = start_position
+    def __init__(self, position: str, player: int):
+        self.position = position
         self.player = player
 
     @abstractmethod
-    def move(self, position: Point) -> None:
+    def move(self, position: str) -> None:
         pass
 
     @abstractmethod
-    def can_move(self) -> bool:
+    def can_move(self, position: str) -> bool:
         pass
 
     @abstractmethod
