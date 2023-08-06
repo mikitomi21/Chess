@@ -4,7 +4,7 @@ from piece import Piece
 from point import Point
 
 
-class Pawn(Piece, ABC):
+class Rock(Piece, ABC):
     def __init__(self, start_position: Point, player: int):
         super().__init__(start_position, player)
 
