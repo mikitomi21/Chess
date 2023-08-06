@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from point import Point
-from board import Board
 
 
 class Piece(ABC):
@@ -12,10 +11,6 @@ class Piece(ABC):
         self.player = player
 
     @abstractmethod
-    def set_start_positions(self, color: str) -> None:
-        pass
-
-    @abstractmethod
     def move(self, position: Point) -> None:
         pass
 
@@ -23,6 +18,10 @@ class Piece(ABC):
     def can_move(self) -> bool:
         pass
 
+    @abstractmethod
+    def __str__(self) -> str:
+        pass
+
     @classmethod
-    def set_board(cls, board: Board) -> None:
+    def set_board(cls, board) -> None:
         cls.board = board

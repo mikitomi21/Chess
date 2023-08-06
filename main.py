@@ -7,8 +7,8 @@ def create_app():
     root.title("Chess")
     root.geometry("1280x800")
 
-    Board(root)
-
+    board = Board(root)
+    board.set_start_positions()
     root.mainloop()
 
 

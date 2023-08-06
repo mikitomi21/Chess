@@ -1,5 +1,13 @@
 from constants import *
 import tkinter as tk
+from point import Point
+from chess_pieces.piece import Piece
+from chess_pieces.bishop import Bishop
+from chess_pieces.king import King
+from chess_pieces.knight import Knight
+from chess_pieces.pawn import Pawn
+from chess_pieces.queen import Queen
+from chess_pieces.rook import Rook
 
 
 class Square:
@@ -8,6 +16,7 @@ class Square:
         self.row = row
         self.col = col
         self.color = self.get_color()
+        self.piece = None
 
         x1 = START_X + LENGHT_OF_SQUARE * row
         y1 = START_Y + LENGHT_OF_SQUARE * col
@@ -23,7 +32,7 @@ class Square:
             return BLACK
         return WHITE
 
-    def click_square(self, event) -> str:
+    def click_square(self, event) -> None:
         if self.color == WHITE:
             self.canvas.itemconfig(self.rectangle, fill=WHITE_PICKED)
             self.color = WHITE_PICKED
@@ -37,15 +46,28 @@ class Square:
             self.canvas.itemconfig(self.rectangle, fill=BLACK)
             self.color = BLACK
 
-        return f"{chr(97+self.row)}{8-self.col}"
+        if self.piece:
+            print(
+                f"{chr(97+self.row)}{8-self.col}: {self.piece} Player-{self.piece.player}"
+            )
+        else:
+            print(f"{chr(97 + self.row)}{8 - self.col}")
 
 
 class Board:
     def __init__(self, root: tk.Tk):
         self.canvas = tk.Canvas(root, width=WIDTH, height=HEIGHT)
         self.canvas.pack()
-
         self.squares = self.create_squares()
+
+    def set_start_positions(self) -> None:
+        Piece.set_board(self)
+        Bishop.set_start_positions()
+        King.set_start_positions()
+        Knight.set_start_positions()
+        Pawn.set_start_positions()
+        Queen.set_start_positions()
+        Rook.set_start_positions()
 
     def create_squares(self) -> list[Square]:
         squares = []
@@ -55,3 +77,8 @@ class Board:
                 row_of_squares.append(Square(self.canvas, row, col))
             squares.append(row_of_squares)
         return squares
+
+    def get_square(self, position: str) -> Square:
+        position = Point(position)
+        y, x = position.y, position.x
+        return self.squares[y][x]

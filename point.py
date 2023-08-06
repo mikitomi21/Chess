@@ -4,5 +4,6 @@ class Point:
         assert len(position) == 2
         self.y, self.x = self.get_position(position)
 
-    def get_position(self, position: str) -> (int, int):
+    @staticmethod
+    def get_position(position: str) -> (int, int):
         return int(position[1]) - 1, ord(position[0]) - 97
