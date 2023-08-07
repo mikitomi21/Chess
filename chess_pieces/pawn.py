@@ -26,10 +26,11 @@ class Pawn(Piece, ABC):
         self.board.get_square(self.position).piece = None
         self.board.get_square(position).piece = self
         self.moved = True
+        print("move")
 
     def can_move(self, pos: str) -> bool:
-        x, y = Point.get_position(self.position)
-        x_new, y_new = Point.get_position(pos)
+        y, x = Point.get_position(self.position)
+        y_new, x_new = Point.get_position(pos)
 
         if self.player == PLAYER_WHITE:
             if y_new - y == 1:

@@ -48,6 +48,7 @@ class Game_Manager:
     @classmethod
     def click_piece(cls, square) -> None:
         pos: str = chr(97 + square.row) + str(8 - square.col)
+        print(f"Pos:{pos}" + " row:" + str(square.row) + " col:" + str(square.col))
         if cls.chosen_piece != None and cls.chosen_piece.can_move(pos):
             cls.chosen_piece.move(pos)
         else:

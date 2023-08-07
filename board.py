@@ -42,8 +42,8 @@ class Square:
         img = img.resize((100, 100))
         self.photo = ImageTk.PhotoImage(img)
 
-        img_x = START_X + (LENGHT_OF_SQUARE * self.row)
-        img_y = START_Y + (LENGHT_OF_SQUARE * self.col)
+        img_x = START_X + LENGHT_OF_SQUARE * self.row
+        img_y = START_Y + LENGHT_OF_SQUARE * self.col
         self.image = self.canvas.create_image(
             img_x, img_y, image=self.photo, anchor=tk.NW
         )
@@ -100,7 +100,6 @@ class Board:
             squares.append(row_of_squares)
         return squares
 
-    def get_square(self, position: str) -> Square:
-        position = Point(position)
-        y, x = position.y, position.x
+    def get_square(self, pos: str) -> Square:
+        y, x = Point.get_position(pos)
         return self.squares[y][x]
