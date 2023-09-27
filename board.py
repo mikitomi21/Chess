@@ -116,3 +116,6 @@ class Board:
     def get_square(self, pos: str) -> Square:
         y, x = Point.get_position(pos)
         return self.squares[y][x]
+
+    def get_square_ints(self, y: int, x: int) -> Square:
+        return self.squares[y][x]

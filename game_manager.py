@@ -61,7 +61,8 @@ class Game_Manager:
             cls.next_player()
 
         else:
-            cls.selected_piece = square.piece
+            cls.set_selected_piece(square.piece)
+            cls.set_selected_square(square)
 
         if square.piece:
             print(

@@ -18,11 +18,20 @@ class King(Piece, ABC):
         board.get_square("e8").piece = King("e8", PLAYER_BLACK, board)
         board.get_square("e8").set_image_path("img/black/king.png")
 
-    def move(self, position: str) -> None:
-        pass
-
-    def can_move(self) -> bool:
-        pass
+    def can_move(self, pos: str) -> bool:
+        # TODO add checks
+        y, x = Point.get_position(self.position)
+        y_new, x_new = Point.get_position(pos)
+        if (
+            (
+                self.board.get_square(pos).piece is None
+                or self.board.get_square(pos).piece.player != self.player
+            )
+            and abs(x - x_new) <= 1
+            and abs(y - y_new) <= 1
+        ):
+            return True
+        return False
 
     def __str__(self) -> str:
         return "King"

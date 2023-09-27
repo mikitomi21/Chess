@@ -23,12 +23,14 @@ class Pawn(Piece, ABC):
             board.get_square(pos_black).set_image_path("img/black/pawn.png")
 
     def move(self, position: str) -> None:
-        self.board.get_square(self.position).piece = None
         image_path = self.board.get_square(self.position).get_image_path()
         self.board.get_square(self.position).set_image_path(None)
+        self.board.get_square(self.position).piece = None
+
         self.board.get_square(position).piece = self
         self.board.get_square(position).set_image_path(image_path)
         self.position = position
+
         self.moved = True
 
     def can_move(self, pos: str) -> bool:
