@@ -1,5 +1,6 @@
 from constants import *
 import tkinter as tk
+from PIL import Image, ImageTk
 
 from point import Point
 
@@ -43,7 +44,10 @@ class Square:
             Game_Manager.try_move_piece(self)
 
     def load_image(self):
-        self.photo = tk.PhotoImage(file=self.image_path)
+        image = Image.open(self.image_path)
+        image = image.resize((100, 100))
+
+        self.photo = ImageTk.PhotoImage(image)
 
         img_x = START_X + LENGHT_OF_SQUARE * self.row
         img_y = START_Y + LENGHT_OF_SQUARE * self.col
