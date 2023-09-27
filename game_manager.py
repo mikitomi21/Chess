@@ -16,9 +16,12 @@ class Game_Manager:
     board: Board = None
 
     @classmethod
-    def set_board(cls, root) -> None:
-        board = Board(root)
-        cls.board = board.get_board()
+    def create_board(cls, root) -> None:
+        cls.board = Board(root)
+
+    @classmethod
+    def set_board(cls, board: Board) -> None:
+        cls.board = board
 
     @classmethod
     def next_player(cls) -> None:
@@ -36,20 +39,17 @@ class Game_Manager:
         return cls.chosen_piece
 
     @classmethod
-    def set_start_positions(cls) -> None:
-        Piece.set_board(cls.board)
-        Bishop.set_start_positions()
-        King.set_start_positions()
-        Knight.set_start_positions()
-        Pawn.set_start_positions()
-        Queen.set_start_positions()
-        Rook.set_start_positions()
+    def select_piece(cls, piece) -> None:
+        cls.chosen_piece = piece
 
     @classmethod
-    def click_piece(cls, square) -> None:
+    def try_move_piece(cls, square) -> None:
         pos: str = chr(97 + square.row) + str(8 - square.col)
-        if cls.chosen_piece != None and cls.chosen_piece.can_move(pos):
+        if cls.chosen_piece.can_move(pos):
             cls.chosen_piece.move(pos)
+            cls.board.draw_pieces()
+            cls.select_piece(None)
+
         else:
             cls.chosen_piece = square.piece
 
@@ -59,3 +59,12 @@ class Game_Manager:
             )
         else:
             print(f"{pos}")
+
+    @classmethod
+    def set_start_positions(cls) -> None:
+        Bishop.set_start_positions(cls.board)
+        King.set_start_positions(cls.board)
+        Knight.set_start_positions(cls.board)
+        Pawn.set_start_positions(cls.board)
+        Queen.set_start_positions(cls.board)
+        Rook.set_start_positions(cls.board)

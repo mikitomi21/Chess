@@ -7,16 +7,16 @@ from constants import *
 
 
 class King(Piece, ABC):
-    def __init__(self, position: str, player: int):
-        super().__init__(position, player)
+    def __init__(self, position: str, player: int, board):
+        super().__init__(position, player, board)
 
     @classmethod
-    def set_start_positions(cls) -> None:
-        cls.board.get_square("e1").piece = King("e1", PLAYER_WHITE)
-        cls.board.get_square("e1").set_image_path("img/white/king.png")
+    def set_start_positions(cls, board) -> None:
+        board.get_square("e1").piece = King("e1", PLAYER_WHITE, board)
+        board.get_square("e1").set_image_path("img/white/king.png")
 
-        cls.board.get_square("e8").piece = King("e8", PLAYER_BLACK)
-        cls.board.get_square("e8").set_image_path("img/black/king.png")
+        board.get_square("e8").piece = King("e8", PLAYER_BLACK, board)
+        board.get_square("e8").set_image_path("img/black/king.png")
 
     def move(self, position: str) -> None:
         pass

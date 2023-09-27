@@ -1,14 +1,12 @@
 from abc import ABC, abstractmethod
-from point import Point
-
 
 class Piece(ABC):
-    board = None
 
     @abstractmethod
-    def __init__(self, position: str, player: int):
+    def __init__(self, position: str, player: int, board):
         self.position = position
         self.player = player
+        self.board = board
 
     @abstractmethod
     def move(self, position: str) -> None:
@@ -21,7 +19,3 @@ class Piece(ABC):
     @abstractmethod
     def __str__(self) -> str:
         pass
-
-    @classmethod
-    def set_board(cls, board) -> None:
-        cls.board = board
