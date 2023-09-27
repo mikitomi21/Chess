@@ -22,18 +22,32 @@ class Knight(Piece, ABC):
         board.get_square("g8").piece = Knight("g8", PLAYER_BLACK, board)
         board.get_square("g8").set_image_path("img/black/knight.png")
 
-    def can_move(self, pos: str) -> bool:
+    def get_all_possible_moves(self) -> list[str]:
+        possible_moves = []
         y, x = Point.get_position(self.position)
-        y_new, x_new = Point.get_position(pos)
 
-        return (
-            abs(y - y_new) == 2
-            and abs(x - x_new) == 1
-            or abs(y - y_new) == 1
-            and abs(x - x_new) == 2
-            and self.board.get_square_ints(y_new, x_new).piece is None
-            or self.board.get_square_ints(y_new, x_new).piece.player != self.player
-        )
+        x_pos = [1, 2, 2, 1, -1, -2, -2, -1]
+        y_pos = x_pos[2:] + x_pos[:2]
+
+        for i in range(len(x_pos)):
+            if (
+                y + y_pos[i] < SIZE_OF_BOARD
+                and y + y_pos[i] >= 0
+                and x + x_pos[i] < SIZE_OF_BOARD
+                and x + x_pos[i] >= 0
+                and (
+                    self.board.get_square_ints(y + y_pos[i], x + x_pos[i]).piece is None
+                    or self.board.get_square_ints(
+                        y + y_pos[i], x + x_pos[i]
+                    ).piece.player
+                    != self.player
+                )
+            ):
+                possible_moves.append(
+                    Point.get_position_int(y + y_pos[i], x + x_pos[i])
+                )
+
+        return possible_moves
 
     def __str__(self) -> str:
         return "Knight"

@@ -22,26 +22,63 @@ class Bishop(Piece, ABC):
         board.get_square("f8").piece = Bishop("f8", PLAYER_BLACK, board)
         board.get_square("f8").set_image_path("img/black/bishop.png")
 
-    def can_move(self, pos: str) -> bool:
+    def get_all_possible_moves(self) -> list[str]:
+        possible_moves = []
         y, x = Point.get_position(self.position)
-        y_new, x_new = Point.get_position(pos)
 
-        if abs(x - x_new) == abs(y - y_new) and x != x_new:
-            x_dir = 1 if x_new > x else -1
-            y_dir = 1 if y_new > y else -1
-            for i in range(1, abs(x - x_new)):
-                if (
-                    self.board.get_square_ints(y + i * y_dir, x + i * x_dir).piece
-                    is not None
-                ):
-                    return False
+        i = 0
+        while x + i < SIZE_OF_BOARD - 1 and y + i < SIZE_OF_BOARD - 1:
+            i += 1
             if (
-                self.board.get_square_ints(y_new, x_new).piece
-                and self.board.get_square_ints(y_new, x_new).piece.player == self.player
+                self.board.get_square_ints(y + i, x + i).piece
+                and self.board.get_square_ints(y + i, x + i).piece.player != self.player
             ):
-                return False
-            return True
-        return False
+                possible_moves.append(Point.get_position_int(y + i, x + i))
+                break
+            if self.board.get_square_ints(y + i, x + i).piece is not None:
+                break
+            possible_moves.append(Point.get_position_int(y + i, x + i))
+
+        i = 0
+        while x + i < SIZE_OF_BOARD - 1 and y > i:
+            i += 1
+            if (
+                self.board.get_square_ints(y - i, x + i).piece
+                and self.board.get_square_ints(y - i, x + i).piece.player != self.player
+            ):
+                possible_moves.append(Point.get_position_int(y - i, x + i))
+                break
+            if self.board.get_square_ints(y - i, x + i).piece is not None:
+                break
+            possible_moves.append(Point.get_position_int(y - i, x + i))
+
+        i = 0
+        while x > i and y > i:
+            i += 1
+            if (
+                self.board.get_square_ints(y - i, x - i).piece
+                and self.board.get_square_ints(y - i, x - i).piece.player != self.player
+            ):
+                possible_moves.append(Point.get_position_int(y - i, x - i))
+                break
+            if self.board.get_square_ints(y - i, x - i).piece is not None:
+                break
+            possible_moves.append(Point.get_position_int(y - i, x - i))
+
+        i = 0
+        while x > i and y + i < SIZE_OF_BOARD - 1:
+            i += 1
+            if (
+                self.board.get_square_ints(y + i, x - i).piece
+                and self.board.get_square_ints(y + i, x - i).piece.player != self.player
+            ):
+                possible_moves.append(Point.get_position_int(y + i, x - i))
+                break
+            if self.board.get_square_ints(y + i, x - i).piece is not None:
+                break
+            possible_moves.append(Point.get_position_int(y + i, x - i))
+
+        return possible_moves
 
     def __str__(self) -> str:
         return "Bishop"
