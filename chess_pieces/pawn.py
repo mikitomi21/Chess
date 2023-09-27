@@ -49,14 +49,19 @@ class Pawn(Piece, ABC):
                         return True
                     elif y - y_new == 2 and not self.moved:
                         return True
-            elif abs(x - x_new) == 1 and abs(y - y_new):
-                # TODO en passant capture
-                pass
         else:
             if abs(x - x_new) == 1:
-                if self.player == PLAYER_BLACK and y_new - y == 1:
+                if (
+                    self.player == PLAYER_BLACK
+                    and y_new - y == 1
+                    and self.board.get_square(pos).piece.player == PLAYER_WHITE
+                ):
                     return True
-                elif self.player == PLAYER_WHITE and y - y_new == 1:
+                elif (
+                    self.player == PLAYER_WHITE
+                    and y - y_new == 1
+                    and self.board.get_square(pos).piece.player == PLAYER_BLACK
+                ):
                     return True
 
         return False
