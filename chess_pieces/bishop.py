@@ -17,7 +17,7 @@ class Bishop(Piece, ABC):
         board.get_square("f1").piece = Bishop("f1", PLAYER_WHITE, board)
         board.get_square("f1").set_image_path("img/white/bishop.png")
 
-        board.get_square("c8").piece = Bishop("a8", PLAYER_BLACK, board)
+        board.get_square("c8").piece = Bishop("c8", PLAYER_BLACK, board)
         board.get_square("c8").set_image_path("img/black/bishop.png")
         board.get_square("f8").piece = Bishop("f8", PLAYER_BLACK, board)
         board.get_square("f8").set_image_path("img/black/bishop.png")

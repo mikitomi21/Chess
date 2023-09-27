@@ -22,11 +22,18 @@ class Knight(Piece, ABC):
         board.get_square("g8").piece = Knight("g8", PLAYER_BLACK, board)
         board.get_square("g8").set_image_path("img/black/knight.png")
 
-    def move(self, position: str) -> None:
-        pass
+    def can_move(self, pos: str) -> bool:
+        y, x = Point.get_position(self.position)
+        y_new, x_new = Point.get_position(pos)
 
-    def can_move(self) -> bool:
-        pass
+        return (
+            abs(y - y_new) == 2
+            and abs(x - x_new) == 1
+            or abs(y - y_new) == 1
+            and abs(x - x_new) == 2
+            and self.board.get_square_ints(y_new, x_new).piece is None
+            or self.board.get_square_ints(y_new, x_new).piece.player != self.player
+        )
 
     def __str__(self) -> str:
         return "Knight"
