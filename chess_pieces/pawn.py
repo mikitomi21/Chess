@@ -22,6 +22,52 @@ class Pawn(Piece, ABC):
             board.get_square(pos_black).piece = Pawn(pos_black, PLAYER_BLACK, board)
             board.get_square(pos_black).set_image_path("img/black/pawn.png")
 
+    def get_all_possible_moves(self) -> list[str]:
+        possible_moves = []
+        y, x = Point.get_position(self.position)
+
+        if self.player == PLAYER_BLACK:
+            if self.board.get_square_ints(y + 1, x).piece is None:
+                possible_moves.append(Point.get_position_int(y + 1, x))
+            if not self.moved and self.board.get_square_ints(y + 2, x).piece is None:
+                possible_moves.append(Point.get_position_int(y + 2, x))
+            if (
+                x > SIZE_OF_BOARD - 1
+                and self.board.get_square_ints(y + 1, x + 1).piece is not None
+                and self.board.get_square_ints(y + 1, x + 1).piece.player
+                == PLAYER_WHITE
+            ):
+                possible_moves.append(Point.get_position_int(y + 1, x + 1))
+            if (
+                x < 0
+                and self.board.get_square_ints(y + 1, x - 1).piece is not None
+                and self.board.get_square_ints(y + 1, x - 1).piece.player
+                == PLAYER_WHITE
+            ):
+                possible_moves.append(Point.get_position_int(y + 1, x - 1))
+
+        elif self.player == PLAYER_WHITE:
+            if self.board.get_square_ints(y - 1, x).piece is None:
+                possible_moves.append(Point.get_position_int(y - 1, x))
+            if not self.moved and self.board.get_square_ints(y - 2, x).piece is None:
+                possible_moves.append(Point.get_position_int(y - 2, x))
+            if (
+                x > SIZE_OF_BOARD - 1
+                and self.board.get_square_ints(y - 1, x + 1).piece is not None
+                and self.board.get_square_ints(y - 1, x + 1).piece.player
+                == PLAYER_BLACK
+            ):
+                possible_moves.append(Point.get_position_int(y - 1, x + 1))
+            if (
+                x < 0
+                and self.board.get_square_ints(y - 1, x - 1).piece is not None
+                and self.board.get_square_ints(y - 1, x - 1).piece.player
+                == PLAYER_BLACK
+            ):
+                possible_moves.append(Point.get_position_int(y - 1, x - 1))
+
+        return possible_moves
+
     def move(self, position: str) -> None:
         image_path = self.board.get_square(self.position).get_image_path()
         self.board.get_square(self.position).set_image_path(None)
@@ -32,39 +78,6 @@ class Pawn(Piece, ABC):
         self.position = position
 
         self.moved = True
-
-    def can_move(self, pos: str) -> bool:
-        y, x = Point.get_position(self.position)
-        y_new, x_new = Point.get_position(pos)
-
-        if self.board.get_square(pos).piece is None:
-            if x == x_new:
-                if self.player == PLAYER_BLACK:
-                    if y_new - y == 1:
-                        return True
-                    elif y_new - y == 2 and not self.moved:
-                        return True
-                elif self.player == PLAYER_WHITE:
-                    if y - y_new == 1:
-                        return True
-                    elif y - y_new == 2 and not self.moved:
-                        return True
-        else:
-            if abs(x - x_new) == 1:
-                if (
-                    self.player == PLAYER_BLACK
-                    and y_new - y == 1
-                    and self.board.get_square(pos).piece.player == PLAYER_WHITE
-                ):
-                    return True
-                elif (
-                    self.player == PLAYER_WHITE
-                    and y - y_new == 1
-                    and self.board.get_square(pos).piece.player == PLAYER_BLACK
-                ):
-                    return True
-
-        return False
 
     def __str__(self) -> str:
         return "pawn"

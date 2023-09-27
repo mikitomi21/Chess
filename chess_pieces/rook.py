@@ -23,6 +23,60 @@ class Rook(Piece, ABC):
         board.get_square("h8").piece = Rook("h8", PLAYER_BLACK, board)
         board.get_square("h8").set_image_path("img/black/rook.png")
 
+    def get_all_possible_moves(self) -> list[str]:
+        possible_moves = []
+        y, x = Point.get_position(self.position)
+
+        if x < SIZE_OF_BOARD - 1:
+            for i in range(x + 1, SIZE_OF_BOARD):
+                if (
+                    self.board.get_square_ints(y, i).piece
+                    and self.board.get_square_ints(y, i).piece.player != self.player
+                ):
+                    possible_moves.append(Point.get_position_int(y, i))
+                    break
+                if self.board.get_square_ints(y, i).piece is not None:
+                    break
+                possible_moves.append(Point.get_position_int(y, i))
+
+        if x > 0:
+            for i in range(x - 1, -1, -1):
+                if (
+                    self.board.get_square_ints(y, i).piece
+                    and self.board.get_square_ints(y, i).piece.player != self.player
+                ):
+                    possible_moves.append(Point.get_position_int(y, i))
+                    break
+                if self.board.get_square_ints(y, i).piece is not None:
+                    break
+                possible_moves.append(Point.get_position_int(y, i))
+
+        if y < SIZE_OF_BOARD - 1:
+            for i in range(y + 1, SIZE_OF_BOARD):
+                if (
+                    self.board.get_square_ints(i, x).piece
+                    and self.board.get_square_ints(i, x).piece.player != self.player
+                ):
+                    possible_moves.append(Point.get_position_int(i, x))
+                    break
+                if self.board.get_square_ints(i, x).piece is not None:
+                    break
+                possible_moves.append(Point.get_position_int(i, x))
+
+        if y > 0:
+            for i in range(y - 1, -1, -1):
+                if (
+                    self.board.get_square_ints(i, x).piece
+                    and self.board.get_square_ints(i, x).piece.player != self.player
+                ):
+                    possible_moves.append(Point.get_position_int(i, x))
+                    break
+                if self.board.get_square_ints(i, x).piece is not None:
+                    break
+                possible_moves.append(Point.get_position_int(i, x))
+
+        return possible_moves
+
     def move(self, position: str) -> None:
         image_path = self.board.get_square(self.position).get_image_path()
         self.board.get_square(self.position).set_image_path(None)
@@ -33,33 +87,6 @@ class Rook(Piece, ABC):
         self.position = position
 
         self.moved = True
-
-    def can_move(self, pos: str) -> bool:
-        y, x = Point.get_position(self.position)
-        y_new, x_new = Point.get_position(pos)
-
-        if x == x_new:
-            for i in range(min(y, y_new) + 1, max(y, y_new)):
-                if self.board.get_square_ints(i, x).piece is not None:
-                    return False
-            if (
-                self.board.get_square_ints(y_new, x).piece
-                and self.board.get_square_ints(y_new, x).piece.player == self.player
-            ):
-                return False
-            return True
-        elif y == y_new:
-            for i in range(min(x, x_new) + 1, max(x, x_new)):
-                if self.board.get_square_ints(y, i).piece is not None:
-                    return False
-            if (
-                self.board.get_square_ints(y, x_new).piece
-                and self.board.get_square_ints(y, x_new).piece.player == self.player
-            ):
-                return False
-            return True
-
-        return False
 
     def __str__(self) -> str:
         return "Rook"

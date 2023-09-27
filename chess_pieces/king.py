@@ -21,6 +21,9 @@ class King(Piece, ABC):
         board.get_square("e8").piece = King("e8", PLAYER_BLACK, board)
         board.get_square("e8").set_image_path("img/black/king.png")
 
+    def get_all_possible_moves(self) -> list[str]:
+        pass
+
     def castling(self) -> None:
         piece = self.castling_check[1]
         y_king, x_king = Point.get_position(self.position)
