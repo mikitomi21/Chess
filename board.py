@@ -1,6 +1,5 @@
 from constants import *
 import tkinter as tk
-from PIL import Image, ImageTk
 
 from point import Point
 
@@ -19,8 +18,7 @@ class Square:
         self.image_path = None
         self.image = None
 
-        if self.image_path:
-            self.load_image()
+        self.draw_image()
 
     def draw_square(self):
         x1 = START_X + LENGHT_OF_SQUARE * self.row
@@ -35,12 +33,17 @@ class Square:
     def click_piece(self, event) -> None:
         from game_manager import Game_Manager
 
-        Game_Manager.click_piece(self)
+        if (
+            Game_Manager.get_selected_piece() is None
+            or Game_Manager.get_player() != Game_Manager.selected_piece.player
+        ):
+            Game_Manager.set_selected_piece(self.piece)
+            Game_Manager.set_selected_square(self)
+        else:
+            Game_Manager.try_move_piece(self)
 
     def load_image(self):
-        img = Image.open(self.image_path)
-        img = img.resize((100, 100))
-        self.photo = ImageTk.PhotoImage(img)
+        self.photo = tk.PhotoImage(file=self.image_path)
 
         img_x = START_X + LENGHT_OF_SQUARE * self.row
         img_y = START_Y + LENGHT_OF_SQUARE * self.col
@@ -52,7 +55,15 @@ class Square:
 
     def set_image_path(self, image_path: str) -> None:
         self.image_path = image_path
-        self.load_image()
+        if image_path:
+            self.load_image()
+
+    def get_image_path(self) -> str:
+        return self.image_path
+
+    def draw_image(self) -> None:
+        if self.image_path:
+            self.load_image()
 
     def get_color(self) -> str:
         if (self.row + self.col) % 2:
@@ -88,9 +99,6 @@ class Board:
         self.canvas.pack()
         self.squares = self.create_squares()
 
-    def get_board(self):
-        return self
-
     def create_squares(self) -> list[Square]:
         squares = []
         for col in range(SIZE_OF_BOARD):
@@ -100,6 +108,14 @@ class Board:
             squares.append(row_of_squares)
         return squares
 
+    def draw_pieces(self, squares: list[Square]) -> None:
+        for square in squares:
+            square.draw_square()
+            square.draw_image()
+
     def get_square(self, pos: str) -> Square:
         y, x = Point.get_position(pos)
+        return self.squares[y][x]
+
+    def get_square_ints(self, y: int, x: int) -> Square:
         return self.squares[y][x]

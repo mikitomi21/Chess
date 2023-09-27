@@ -11,7 +11,7 @@ def create_app() -> tk.Tk:
 
 
 def start_game(root: tk.Tk) -> None:
-    Game_Manager.set_board(root)
+    Game_Manager.create_board(root)
     Game_Manager.set_start_positions()
     root.mainloop()
 
