@@ -17,8 +17,8 @@ class Game_Manager:
     board: Board = None
 
     @classmethod
-    def create_board(cls, root) -> None:
-        cls.board = Board(root)
+    def create_board(cls, root, canvas) -> None:
+        cls.board = Board(root, canvas)
 
     @classmethod
     def set_board(cls, board: Board) -> None:
