@@ -22,7 +22,48 @@ class King(Piece, ABC):
         board.get_square("e8").set_image_path("img/black/king.png")
 
     def get_all_possible_moves(self) -> list[str]:
-        pass
+        possible_moves = []
+        y, x = Point.get_position(self.position)
+
+        x_pos = [1,1,1,0,-1,-1,-1,0]
+        y_pos = x_pos[len(x_pos)-2:] + x_pos[:len(x_pos)-2]
+
+        for i in range(len(x_pos)):
+            if (
+                y + y_pos[i] < SIZE_OF_BOARD
+                and y + y_pos[i] >= 0
+                and x + x_pos[i] < SIZE_OF_BOARD
+                and x + x_pos[i] >= 0
+                and (
+                    self.board.get_square_ints(y + y_pos[i], x + x_pos[i]).piece is None
+                    or self.board.get_square_ints(
+                        y + y_pos[i], x + x_pos[i]
+                    ).piece.player
+                    != self.player
+                )
+            ):
+                possible_moves.append(
+                    Point.get_position_int(y + y_pos[i], x + x_pos[i])
+                )
+
+        rooks = []
+        if self.player == PLAYER_WHITE:
+            rooks.append(self.board.get_square_ints(7,0).piece)
+            rooks.append(self.board.get_square_ints(7,7).piece)
+        else:
+            rooks.append(self.board.get_square_ints(0, 0).piece)
+            rooks.append(self.board.get_square_ints(0, 7).piece)
+
+        for piece in rooks:
+            if (
+                    piece
+                    and isinstance(piece, Rook)
+                    and piece.player == self.player
+                    and not piece.moved
+            ):
+                possible_moves.append(piece.position)
+        print(possible_moves)
+        return possible_moves
 
     def castling(self) -> None:
         piece = self.castling_check[1]
@@ -69,33 +110,8 @@ class King(Piece, ABC):
         self.moved = True
 
     def can_move(self, pos: str) -> bool:
-        # TODO add checks
-        y, x = Point.get_position(self.position)
-        y_new, x_new = Point.get_position(pos)
-        if (
-            (
-                self.board.get_square(pos).piece is None
-                or self.board.get_square(pos).piece.player != self.player
-            )
-            and abs(x - x_new) <= 1
-            and abs(y - y_new) <= 1
-        ):
+        if pos in self.get_all_possible_moves():
             return True
-        if not self.moved and y_new == y and x_new in (0, 7):
-            x_dir = 1 if x_new > x else -1
-            for i in range(x + x_dir, x_new, x_dir):
-                if self.board.get_square_ints(y, i).piece is not None:
-                    return False
-            piece = self.board.get_square_ints(y_new, x_new).piece
-            if (
-                piece
-                and isinstance(piece, Rook)
-                and piece.player == self.player
-                and not piece.moved
-            ):
-                self.castling_check = (True, piece)
-                return True
-
         return False
 
     def __str__(self) -> str:
