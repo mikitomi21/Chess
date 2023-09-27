@@ -32,14 +32,14 @@ class Pawn(Piece, ABC):
             if not self.moved and self.board.get_square_ints(y + 2, x).piece is None:
                 possible_moves.append(Point.get_position_int(y + 2, x))
             if (
-                x > SIZE_OF_BOARD - 1
+                x < SIZE_OF_BOARD - 1
                 and self.board.get_square_ints(y + 1, x + 1).piece is not None
                 and self.board.get_square_ints(y + 1, x + 1).piece.player
                 == PLAYER_WHITE
             ):
                 possible_moves.append(Point.get_position_int(y + 1, x + 1))
             if (
-                x < 0
+                x > 0
                 and self.board.get_square_ints(y + 1, x - 1).piece is not None
                 and self.board.get_square_ints(y + 1, x - 1).piece.player
                 == PLAYER_WHITE
@@ -52,23 +52,26 @@ class Pawn(Piece, ABC):
             if not self.moved and self.board.get_square_ints(y - 2, x).piece is None:
                 possible_moves.append(Point.get_position_int(y - 2, x))
             if (
-                x > SIZE_OF_BOARD - 1
+                x < SIZE_OF_BOARD - 1
                 and self.board.get_square_ints(y - 1, x + 1).piece is not None
                 and self.board.get_square_ints(y - 1, x + 1).piece.player
                 == PLAYER_BLACK
             ):
                 possible_moves.append(Point.get_position_int(y - 1, x + 1))
             if (
-                x < 0
+                x > 0
                 and self.board.get_square_ints(y - 1, x - 1).piece is not None
                 and self.board.get_square_ints(y - 1, x - 1).piece.player
                 == PLAYER_BLACK
             ):
                 possible_moves.append(Point.get_position_int(y - 1, x - 1))
 
+        print(possible_moves)
+
         return possible_moves
 
     def move(self, position: str) -> None:
+        # TODO use super
         image_path = self.board.get_square(self.position).get_image_path()
         self.board.get_square(self.position).set_image_path(None)
         self.board.get_square(self.position).piece = None
