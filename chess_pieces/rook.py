@@ -9,6 +9,7 @@ from constants import *
 class Rook(Piece, ABC):
     def __init__(self, position: str, player: int, board):
         super().__init__(position, player, board)
+        self.moved = False
 
     @classmethod
     def set_start_positions(cls, board) -> None:
@@ -21,6 +22,17 @@ class Rook(Piece, ABC):
         board.get_square("a8").set_image_path("img/black/rook.png")
         board.get_square("h8").piece = Rook("h8", PLAYER_BLACK, board)
         board.get_square("h8").set_image_path("img/black/rook.png")
+
+    def move(self, position: str) -> None:
+        image_path = self.board.get_square(self.position).get_image_path()
+        self.board.get_square(self.position).set_image_path(None)
+        self.board.get_square(self.position).piece = None
+
+        self.board.get_square(position).piece = self
+        self.board.get_square(position).set_image_path(image_path)
+        self.position = position
+
+        self.moved = True
 
     def can_move(self, pos: str) -> bool:
         y, x = Point.get_position(self.position)
