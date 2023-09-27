@@ -35,16 +35,27 @@ class Pawn(Piece, ABC):
         y, x = Point.get_position(self.position)
         y_new, x_new = Point.get_position(pos)
 
-        if self.player == PLAYER_BLACK:
-            if y_new - y == 1:
-                return True
-            elif y_new - y == 2 and not self.moved:
-                return True
-        elif self.player == PLAYER_WHITE:
-            if y - y_new == 1:
-                return True
-            elif y - y_new == 2 and not self.moved:
-                return True
+        if self.board.get_square(pos).piece is None:
+            if x == x_new:
+                if self.player == PLAYER_BLACK:
+                    if y_new - y == 1:
+                        return True
+                    elif y_new - y == 2 and not self.moved:
+                        return True
+                elif self.player == PLAYER_WHITE:
+                    if y - y_new == 1:
+                        return True
+                    elif y - y_new == 2 and not self.moved:
+                        return True
+            elif abs(x - x_new) == 1 and abs(y - y_new):
+                # TODO en passant capture
+                pass
+        else:
+            if abs(x - x_new) == 1:
+                if self.player == PLAYER_BLACK and y_new - y == 1:
+                    return True
+                elif self.player == PLAYER_WHITE and y - y_new == 1:
+                    return True
 
         return False
 
