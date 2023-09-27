@@ -3,6 +3,7 @@ import tkinter as tk
 
 from point import Point
 
+
 class Square:
     def __init__(self, root: tk.Tk, canvas: tk.Canvas, row: int, col: int):
         self.root = root
@@ -31,7 +32,11 @@ class Square:
 
     def click_piece(self, event) -> None:
         from game_manager import Game_Manager
-        if Game_Manager.get_chosen_piece() is None:
+
+        if (
+            Game_Manager.get_chosen_piece() is None
+            or Game_Manager.get_player() != Game_Manager.chosen_piece.player
+        ):
             Game_Manager.select_piece(self.piece)
         else:
             Game_Manager.try_move_piece(self)

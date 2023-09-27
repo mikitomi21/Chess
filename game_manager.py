@@ -49,6 +49,7 @@ class Game_Manager:
             cls.chosen_piece.move(pos)
             cls.board.draw_pieces()
             cls.select_piece(None)
+            cls.next_player()
 
         else:
             cls.chosen_piece = square.piece

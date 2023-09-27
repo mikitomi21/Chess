@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-class Piece(ABC):
 
+class Piece(ABC):
     @abstractmethod
     def __init__(self, position: str, player: int, board):
         self.position = position
