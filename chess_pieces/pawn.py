@@ -49,9 +49,6 @@ class Pawn(Piece, ABC):
                         return True
                     elif y - y_new == 2 and not self.moved:
                         return True
-            elif abs(x - x_new) == 1 and abs(y - y_new):
-                # TODO en passant capture
-                pass
         else:
             if abs(x - x_new) == 1:
                 if (
