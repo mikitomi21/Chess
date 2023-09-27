@@ -113,21 +113,15 @@ class King(Piece, ABC):
         piece.moved = True
         self.castling_check = None
 
-    def move(self, pos: str) -> None:
+    def move(self, position: str) -> None:
         if (
             not self.moved
             and self.castling_check.get_can_castling()
-            and pos in self.castling_check.get_options()
+            and position in self.castling_check.get_options()
         ):
-            self.castling(pos)
+            self.castling(position)
         else:
-            image_path = self.board.get_square(self.position).get_image_path()
-            self.board.get_square(self.position).set_image_path(None)
-            self.board.get_square(self.position).piece = None
-
-            self.board.get_square(pos).piece = self
-            self.board.get_square(pos).set_image_path(image_path)
-            self.position = pos
+            super().move(position)
 
         self.moved = True
 

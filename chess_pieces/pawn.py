@@ -71,15 +71,7 @@ class Pawn(Piece, ABC):
         return possible_moves
 
     def move(self, position: str) -> None:
-        # TODO use super
-        image_path = self.board.get_square(self.position).get_image_path()
-        self.board.get_square(self.position).set_image_path(None)
-        self.board.get_square(self.position).piece = None
-
-        self.board.get_square(position).piece = self
-        self.board.get_square(position).set_image_path(image_path)
-        self.position = position
-
+        super().move(position)
         self.moved = True
 
     def __str__(self) -> str:
