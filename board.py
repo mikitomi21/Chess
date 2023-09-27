@@ -34,10 +34,11 @@ class Square:
         from game_manager import Game_Manager
 
         if (
-            Game_Manager.get_chosen_piece() is None
-            or Game_Manager.get_player() != Game_Manager.chosen_piece.player
+            Game_Manager.get_selected_piece() is None
+            or Game_Manager.get_player() != Game_Manager.selected_piece.player
         ):
-            Game_Manager.select_piece(self.piece)
+            Game_Manager.set_selected_piece(self.piece)
+            Game_Manager.set_selected_square(self)
         else:
             Game_Manager.try_move_piece(self)
 
@@ -107,10 +108,10 @@ class Board:
             squares.append(row_of_squares)
         return squares
 
-    def draw_pieces(self) -> None:
-        for col in self.squares:
-            for square in col:
-                square.draw_image()
+    def draw_pieces(self, squares: list[Square]) -> None:
+        for square in squares:
+            square.draw_square()
+            square.draw_image()
 
     def get_square(self, pos: str) -> Square:
         y, x = Point.get_position(pos)
