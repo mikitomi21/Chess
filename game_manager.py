@@ -15,6 +15,7 @@ class Game_Manager:
     selected_piece: Piece = None
     selected_square: Square = None
     board: Board = None
+    is_check: bool = False
 
     @classmethod
     def create_board(cls, root) -> None:
@@ -59,6 +60,7 @@ class Game_Manager:
             cls.board.draw_pieces([square, cls.selected_square])
             cls.set_selected_piece(None)
             cls.next_player()
+            cls.update_check_status()
 
         else:
             cls.set_selected_piece(square.piece)
@@ -79,3 +81,34 @@ class Game_Manager:
         Pawn.set_start_positions(cls.board)
         Queen.set_start_positions(cls.board)
         Rook.set_start_positions(cls.board)
+
+    @classmethod
+    def get_player_pieces(cls, player: int) -> list[Piece]:
+        pieces = []
+        for y in range(SIZE_OF_BOARD):
+            for x in range(SIZE_OF_BOARD):
+                piece = cls.board.get_square_ints(y, x).piece
+                if piece and piece.player == player:
+                    pieces.append(piece)
+        return pieces
+
+    @classmethod
+    def get_king(cls, player: int) -> King:
+        for y in range(SIZE_OF_BOARD):
+            for x in range(SIZE_OF_BOARD):
+                piece = cls.board.get_square_ints(y, x).piece
+                if isinstance(piece, King) and piece.player == player:
+                    return piece
+
+    @classmethod
+    def update_check_status(cls) -> None:
+        pieces = Game_Manager.get_player_pieces(not cls.current_player)
+        king = Game_Manager.get_king(cls.current_player)
+        all_possible_moves = []
+        for piece in pieces:
+            all_possible_moves.extend(piece.get_all_possible_moves())
+        cls.is_check = king.position in all_possible_moves
+        if cls.is_check:
+            print("Check")
+        else:
+            print("...")

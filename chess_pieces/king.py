@@ -28,6 +28,7 @@ class King(Piece, ABC):
         super().__init__(position, player, board)
         self.moved = False
         self.castling_check = Castling_Options()
+        self.check = False
 
     @classmethod
     def set_start_positions(cls, board) -> None:
