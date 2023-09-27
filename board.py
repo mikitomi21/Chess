@@ -45,7 +45,7 @@ class Square:
 
     def load_image(self):
         image = Image.open(self.image_path)
-        image = image.resize((100, 100))
+        image = image.resize((SIZE_OF_PIECE, SIZE_OF_PIECE))
 
         self.photo = ImageTk.PhotoImage(image)
 
@@ -88,19 +88,18 @@ class Square:
             self.canvas.itemconfig(self.rectangle, fill=BLACK)
             self.color = BLACK
 
-        if self.piece:
-            print(
-                f"{chr(97+self.row)}{8-self.col}: {self.piece} {'Black' if self.piece.player else 'White'}"
-            )
-        else:
-            print(f"{chr(97 + self.row)}{8 - self.col}")
+        # if self.piece:
+        #     print(
+        #         f"{chr(97+self.row)}{8-self.col}: {self.piece} {'Black' if self.piece.player else 'White'}"
+        #     )
+        # else:
+        #     print(f"{chr(97 + self.row)}{8 - self.col}")
 
 
 class Board:
-    def __init__(self, root: tk.Tk):
+    def __init__(self, root: tk.Tk, canvas: tk.Canvas):
         self.root = root
-        self.canvas = tk.Canvas(root, width=WIDTH, height=HEIGHT)
-        self.canvas.pack()
+        self.canvas = canvas
         self.squares = self.create_squares()
 
     def create_squares(self) -> list[Square]:
