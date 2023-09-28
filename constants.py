@@ -17,3 +17,5 @@ PLAYER_BLACK = 1
 NUMBER_OF_PAWNS = 8
 
 choose_piece = None
+
+SIZE_OF_CIRCLE = 30
