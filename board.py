@@ -124,6 +124,7 @@ class Square:
         elif self.color == BLACK_PICKED:
             self.canvas.itemconfig(self.rectangle, fill=BLACK)
             self.color = BLACK
+            
 class Board:
     def __init__(self, root: tk.Tk, canvas: tk.Canvas):
         self.root = root
