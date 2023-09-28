@@ -5,6 +5,24 @@ from PIL import Image, ImageTk
 from point import Point
 
 
+class Cirle:
+    def __init__(self, canvas: tk.Canvas, y, x, square):
+        self.canvas = canvas
+        self.y = y
+        self.x = x
+        self.square = square
+
+    def create_oval(self) -> None:
+        circle = self.canvas.create_oval(
+            START_X + LENGHT_OF_SQUARE * self.x + SIZE_OF_CIRCLE,
+            START_Y + LENGHT_OF_SQUARE * self.y + SIZE_OF_CIRCLE,
+            START_X + LENGHT_OF_SQUARE * (self.x + 1) - SIZE_OF_CIRCLE,
+            START_Y + LENGHT_OF_SQUARE * (self.y + 1) - SIZE_OF_CIRCLE,
+            fill="red",
+        )
+        self.canvas.tag_bind(circle, "<Button-1>", self.square.click_piece)
+
+
 class Square:
     def __init__(self, root: tk.Tk, canvas: tk.Canvas, row: int, col: int):
         self.root = root
@@ -31,8 +49,27 @@ class Square:
         self.canvas.tag_bind(self.rectangle, "<Button-3>", self.click_square)
         self.canvas.tag_bind(self.rectangle, "<Button-1>", self.click_piece)
 
-    def click_piece(self, event) -> None:
+    def show_possible_moves(self, piece):
         from game_manager import Game_Manager
+
+        possible_moves = piece.get_all_possible_moves()
+        for pos in possible_moves:
+            y, x = Point.get_position(pos)
+            Cirle(
+                self.canvas,
+                y,
+                x,
+                Game_Manager.board.get_square(Point.get_position_int(y, x)),
+            ).create_oval()
+
+    def click_piece(self, event) -> None:
+        # print(f"{chr(97 + self.row)}{8 - self.col}")
+        from game_manager import Game_Manager
+
+        Game_Manager.board.draw_board(Game_Manager.board)
+
+        if self.piece and self.piece.player == Game_Manager.get_player():
+            self.show_possible_moves(self.piece)
 
         if (
             Game_Manager.get_selected_piece() is None
@@ -88,13 +125,6 @@ class Square:
             self.canvas.itemconfig(self.rectangle, fill=BLACK)
             self.color = BLACK
 
-        if self.piece:
-            print(
-                f"{chr(97+self.row)}{8-self.col}: {self.piece} {'Black' if self.piece.player else 'White'}"
-            )
-        else:
-            print(f"{chr(97 + self.row)}{8 - self.col}")
-
 
 class Board:
     def __init__(self, root: tk.Tk):
@@ -111,6 +141,13 @@ class Board:
                 row_of_squares.append(Square(self.root, self.canvas, row, col))
             squares.append(row_of_squares)
         return squares
+
+    def draw_board(self, board) -> None:
+        for y in range(SIZE_OF_BOARD):
+            for x in range(SIZE_OF_BOARD):
+                square = board.get_square_ints(y, x)
+                square.draw_square()
+                square.draw_image()
 
     def draw_pieces(self, squares: list[Square]) -> None:
         for square in squares:
