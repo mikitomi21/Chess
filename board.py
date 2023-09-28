@@ -124,18 +124,6 @@ class Square:
         elif self.color == BLACK_PICKED:
             self.canvas.itemconfig(self.rectangle, fill=BLACK)
             self.color = BLACK
-
-<<<<<<< HEAD
-=======
-        # if self.piece:
-        #     print(
-        #         f"{chr(97+self.row)}{8-self.col}: {self.piece} {'Black' if self.piece.player else 'White'}"
-        #     )
-        # else:
-        #     print(f"{chr(97 + self.row)}{8 - self.col}")
-
-
->>>>>>> 66c3da8 (Add place for timer)
 class Board:
     def __init__(self, root: tk.Tk, canvas: tk.Canvas):
         self.root = root
