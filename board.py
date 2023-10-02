@@ -54,7 +54,7 @@ class Square:
     def show_possible_moves(self, piece):
         from game_manager import Game_Manager
 
-        possible_moves = piece.get_all_possible_moves()
+        possible_moves = piece.remove_mating_moves(piece.get_all_possible_moves())
         for pos in possible_moves:
             y, x = Point.get_position(pos)
             Cirle(
