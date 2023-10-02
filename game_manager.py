@@ -75,6 +75,7 @@ class Game_Manager:
         cls.selected_square = selected_square_tmp
         cls.current_player = current_player_tmp
         cls.is_check = is_check_tmp
+        cls.board.draw_board()
         return True
 
     @classmethod
