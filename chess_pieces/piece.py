@@ -1,3 +1,4 @@
+import copy
 from abc import ABC, abstractmethod
 
 
@@ -11,6 +12,9 @@ class Piece(ABC):
     @abstractmethod
     def get_all_possible_moves(self) -> list[str]:
         pass
+
+    def get_position(self) -> str:
+        return self.position
 
     def move(self, position: str) -> None:
         image_path = self.board.get_square(self.position).get_image_path()
@@ -29,3 +33,10 @@ class Piece(ABC):
     @abstractmethod
     def __str__(self) -> str:
         pass
+
+    def __deepcopy__(self, memo):
+        new_piece = self.__class__(self.position, self.board, self.player)
+        new_piece.position = self.position
+        new_piece.board = copy.deepcopy(self.board, memo)
+        new_piece.player = self.player
+        return new_piece

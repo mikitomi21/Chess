@@ -81,7 +81,7 @@ class King(Piece, ABC):
                 ):
                     possible_moves.append(piece.position)
                     self.castling_check.add_option(piece.position)
-        print(possible_moves)
+        # print(possible_moves)
         return possible_moves
 
     def castling(self, pos: str) -> None:

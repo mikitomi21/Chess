@@ -1,3 +1,4 @@
+import copy
 from constants import *
 from board import Board, Square
 
@@ -11,10 +12,10 @@ from chess_pieces.rook import Rook
 
 
 class Game_Manager:
+    board: Board = None
     current_player = PLAYER_WHITE
     selected_piece: Piece = None
     selected_square: Square = None
-    board: Board = None
     is_check: bool = False
 
     @classmethod
@@ -53,9 +54,36 @@ class Game_Manager:
         cls.selected_square = square
 
     @classmethod
+    def simulate_move(cls, pos_start: str, pos_end: str):
+        board_tmp = cls.board
+        selected_piece_tmp = cls.selected_piece
+        selected_square_tmp = cls.selected_square
+        current_player_tmp = cls.current_player
+        is_check_tmp = cls.is_check
+
+        cls.board = copy.deepcopy(cls.board)
+        cls.selected_piece = cls.board.get_square(pos_start).piece
+        cls.selected_piece.move(pos_end)
+        cls.set_selected_piece(None)
+
+        cls.update_check_status()
+        if cls.is_check:
+            print("mat")
+
+        cls.board = board_tmp
+        cls.selected_piece = selected_piece_tmp
+        cls.selected_square = selected_square_tmp
+        cls.current_player = current_player_tmp
+        cls.is_check = is_check_tmp
+        return True
+
+    @classmethod
     def try_move_piece(cls, square) -> None:
         pos: str = chr(97 + square.row) + str(8 - square.col)
-        if cls.selected_piece.can_move(pos):
+
+        if cls.selected_piece.can_move(pos) and cls.simulate_move(
+            cls.get_selected_piece().get_position(), pos
+        ):
             cls.selected_piece.move(pos)
             cls.board.draw_pieces([square, cls.selected_square])
             cls.set_selected_piece(None)
