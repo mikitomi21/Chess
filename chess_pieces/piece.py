@@ -15,7 +15,6 @@ class Piece(ABC):
         available_moves = []
         for move in all_possible_moves:
             if Game_Manager.simulate_move(self.position, move):
-                print("siema")
                 available_moves.append(move)
         return available_moves
 

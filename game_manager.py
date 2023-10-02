@@ -85,7 +85,6 @@ class Game_Manager:
     @classmethod
     def try_move_piece(cls, square) -> None:
         pos: str = chr(97 + square.row) + str(8 - square.col)
-
         if cls.selected_piece.can_move(pos) and cls.simulate_move(
             cls.get_selected_piece().get_position(), pos
         ):
@@ -94,6 +93,10 @@ class Game_Manager:
             cls.set_selected_piece(None)
             cls.next_player()
             cls.update_check_status()
+            if cls.is_check:
+                print("Check")
+            if cls.check_mat():
+                print("Mate")
 
         else:
             cls.set_selected_piece(square.piece)
@@ -141,7 +144,13 @@ class Game_Manager:
         for piece in pieces:
             all_possible_moves.extend(piece.get_all_possible_moves())
         cls.is_check = king.position in all_possible_moves
-        if cls.is_check:
-            print("Check")
-        else:
-            print("...")
+
+    @classmethod
+    def check_mat(cls) -> None:
+        if not cls.is_check:
+            return False
+        king = Game_Manager.get_king(cls.current_player)
+        possible_moves = king.remove_mating_moves(king.get_all_possible_moves())
+        if len(possible_moves) == 0:
+            return True
+        return False
