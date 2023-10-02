@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 from point import Point
 
 
-class Cirle:
+class Circle:
     def __init__(self, canvas: tk.Canvas, y, x, square):
         self.canvas = canvas
         self.y = y
@@ -57,7 +57,7 @@ class Square:
         possible_moves = piece.remove_mating_moves(piece.get_all_possible_moves())
         for pos in possible_moves:
             y, x = Point.get_position(pos)
-            Cirle(
+            Circle(
                 self.canvas,
                 y,
                 x,
