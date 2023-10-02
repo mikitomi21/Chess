@@ -1,3 +1,5 @@
+import copy
+
 from constants import *
 import tkinter as tk
 from PIL import Image, ImageTk
@@ -52,7 +54,7 @@ class Square:
     def show_possible_moves(self, piece):
         from game_manager import Game_Manager
 
-        possible_moves = piece.get_all_possible_moves()
+        possible_moves = piece.remove_mating_moves(piece.get_all_possible_moves())
         for pos in possible_moves:
             y, x = Point.get_position(pos)
             Cirle(
@@ -66,7 +68,7 @@ class Square:
         # print(f"{chr(97 + self.row)}{8 - self.col}")
         from game_manager import Game_Manager
 
-        Game_Manager.board.draw_board(Game_Manager.board)
+        Game_Manager.board.draw_board()
 
         if self.piece and self.piece.player == Game_Manager.get_player():
             self.show_possible_moves(self.piece)
@@ -125,6 +127,15 @@ class Square:
             self.canvas.itemconfig(self.rectangle, fill=BLACK)
             self.color = BLACK
 
+    def __deepcopy__(self, memo):
+        new_square = self.__class__(self.root, self.canvas, self.row, self.col)
+        new_square.color = self.color
+        new_square.piece = copy.deepcopy(self.piece, memo)
+        new_square.image_path = self.image_path
+        new_square.image = self.image
+        return new_square
+
+
 class Board:
     def __init__(self, root: tk.Tk, canvas: tk.Canvas):
         self.root = root
@@ -140,10 +151,10 @@ class Board:
             squares.append(row_of_squares)
         return squares
 
-    def draw_board(self, board) -> None:
+    def draw_board(self) -> None:
         for y in range(SIZE_OF_BOARD):
             for x in range(SIZE_OF_BOARD):
-                square = board.get_square_ints(y, x)
+                square = self.get_square_ints(y, x)
                 square.draw_square()
                 square.draw_image()
 
@@ -158,3 +169,19 @@ class Board:
 
     def get_square_ints(self, y: int, x: int) -> Square:
         return self.squares[y][x]
+
+    def __deepcopy__(self, memo):
+        if self in memo:
+            return memo[self]
+        new_board = self.__class__(self.root, self.canvas)
+        new_board.squares = []
+        memo[self] = new_board
+
+        for row in self.squares:
+            new_row = []
+            for square in row:
+                new_square = copy.deepcopy(square, memo)
+                new_row.append(new_square)
+            new_board.squares.append(new_row)
+
+        return new_board

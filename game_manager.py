@@ -1,3 +1,4 @@
+import copy
 from constants import *
 from board import Board, Square
 
@@ -11,10 +12,10 @@ from chess_pieces.rook import Rook
 
 
 class Game_Manager:
+    board: Board = None
     current_player = PLAYER_WHITE
     selected_piece: Piece = None
     selected_square: Square = None
-    board: Board = None
     is_check: bool = False
 
     @classmethod
@@ -53,14 +54,49 @@ class Game_Manager:
         cls.selected_square = square
 
     @classmethod
+    def back_to_the_previous_setup(
+        cls, board_tmp, selected_piece_tmp, is_check_tmp
+    ) -> None:
+        cls.board = board_tmp
+        cls.selected_piece = selected_piece_tmp
+        cls.is_check = is_check_tmp
+        cls.board.draw_board()
+
+    @classmethod
+    def simulate_move(cls, pos_start: str, pos_end: str):
+        board_tmp = cls.board
+        selected_piece_tmp = cls.selected_piece
+        is_check_tmp = cls.is_check
+
+        cls.board = copy.deepcopy(cls.board)
+        cls.selected_piece = cls.board.get_square(pos_start).piece
+        cls.selected_piece.move(pos_end)
+        cls.set_selected_piece(None)
+
+        cls.update_check_status()
+        if cls.is_check:
+            cls.back_to_the_previous_setup(board_tmp, selected_piece_tmp, is_check_tmp)
+            return False
+
+        cls.back_to_the_previous_setup(board_tmp, selected_piece_tmp, is_check_tmp)
+        cls.is_check = is_check_tmp
+        return True
+
+    @classmethod
     def try_move_piece(cls, square) -> None:
         pos: str = chr(97 + square.row) + str(8 - square.col)
-        if cls.selected_piece.can_move(pos):
+        if cls.selected_piece.can_move(pos) and cls.simulate_move(
+            cls.get_selected_piece().get_position(), pos
+        ):
             cls.selected_piece.move(pos)
             cls.board.draw_pieces([square, cls.selected_square])
             cls.set_selected_piece(None)
             cls.next_player()
             cls.update_check_status()
+            if cls.is_check:
+                print("Check")
+            if cls.check_mat():
+                print("Mate")
 
         else:
             cls.set_selected_piece(square.piece)
@@ -108,7 +144,13 @@ class Game_Manager:
         for piece in pieces:
             all_possible_moves.extend(piece.get_all_possible_moves())
         cls.is_check = king.position in all_possible_moves
-        if cls.is_check:
-            print("Check")
-        else:
-            print("...")
+
+    @classmethod
+    def check_mat(cls) -> None:
+        if not cls.is_check:
+            return False
+        king = Game_Manager.get_king(cls.current_player)
+        possible_moves = king.remove_mating_moves(king.get_all_possible_moves())
+        if len(possible_moves) == 0:
+            return True
+        return False

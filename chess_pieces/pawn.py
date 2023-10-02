@@ -66,8 +66,6 @@ class Pawn(Piece, ABC):
             ):
                 possible_moves.append(Point.get_position_int(y - 1, x - 1))
 
-        print(possible_moves)
-
         return possible_moves
 
     def move(self, position: str) -> None:
