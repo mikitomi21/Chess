@@ -26,7 +26,11 @@ class Piece(ABC):
         self.position = position
 
     def can_move(self, pos: str) -> bool:
-        if pos in self.get_all_possible_moves():
+        from game_manager import Game_Manager
+
+        if pos in self.get_all_possible_moves() and Game_Manager.simulate_move(
+            self.position, pos
+        ):
             return True
         return False
 

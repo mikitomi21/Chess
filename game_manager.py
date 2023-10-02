@@ -54,11 +54,18 @@ class Game_Manager:
         cls.selected_square = square
 
     @classmethod
+    def back_to_the_previous_setup(
+        cls, board_tmp, selected_piece_tmp, is_check_tmp
+    ) -> None:
+        cls.board = board_tmp
+        cls.selected_piece = selected_piece_tmp
+        cls.is_check = is_check_tmp
+        cls.board.draw_board()
+
+    @classmethod
     def simulate_move(cls, pos_start: str, pos_end: str):
         board_tmp = cls.board
         selected_piece_tmp = cls.selected_piece
-        selected_square_tmp = cls.selected_square
-        current_player_tmp = cls.current_player
         is_check_tmp = cls.is_check
 
         cls.board = copy.deepcopy(cls.board)
@@ -68,14 +75,11 @@ class Game_Manager:
 
         cls.update_check_status()
         if cls.is_check:
-            print("mat")
+            cls.back_to_the_previous_setup(board_tmp, selected_piece_tmp, is_check_tmp)
+            return False
 
-        cls.board = board_tmp
-        cls.selected_piece = selected_piece_tmp
-        cls.selected_square = selected_square_tmp
-        cls.current_player = current_player_tmp
+        cls.back_to_the_previous_setup(board_tmp, selected_piece_tmp, is_check_tmp)
         cls.is_check = is_check_tmp
-        cls.board.draw_board()
         return True
 
     @classmethod
