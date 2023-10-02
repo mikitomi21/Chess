@@ -84,12 +84,14 @@ class Square:
 
     def load_image(self):
         image = Image.open(self.image_path)
-        image = image.resize((SIZE_OF_PIECE, SIZE_OF_PIECE))
+        image = image.resize(
+            (SIZE_OF_PIECE - MARGIN_OF_PIECE, SIZE_OF_PIECE - MARGIN_OF_PIECE)
+        )
 
         self.photo = ImageTk.PhotoImage(image)
 
-        img_x = START_X + LENGHT_OF_SQUARE * self.row
-        img_y = START_Y + LENGHT_OF_SQUARE * self.col
+        img_x = START_X + LENGHT_OF_SQUARE * self.row + MARGIN_OF_PIECE / 2
+        img_y = START_Y + LENGHT_OF_SQUARE * self.col + MARGIN_OF_PIECE / 2
         self.image = self.canvas.create_image(
             img_x, img_y, image=self.photo, anchor=tk.NW
         )
