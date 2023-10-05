@@ -74,7 +74,16 @@ class Pawn(Piece, ABC):
 
     def move(self, position: str) -> None:
         super().move(position)
+        # self.notation_table.save_move_to_file(self.moved)
         self.moved = True
+
+    def get_notation_move(self, pos: str):
+        notation = ""
+        if self.board.get_square(pos).piece:
+            notation += "x"
+        notation += pos
+
+        return notation
 
     def __str__(self) -> str:
         return "pawn"

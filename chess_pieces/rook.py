@@ -81,5 +81,13 @@ class Rook(Piece, ABC):
         super().move(position)
         self.moved = True
 
+    def get_notation_move(self, pos: str):
+        notation = "R"
+        if self.board.get_square(pos).piece:
+            notation += "x"
+        notation += pos
+
+        return notation
+
     def __str__(self) -> str:
         return "Rook"

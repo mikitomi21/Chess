@@ -38,11 +38,13 @@ class Piece(ABC):
     def can_move(self, pos: str) -> bool:
         from game_manager import Game_Manager
 
-        if pos in self.get_all_possible_moves() and Game_Manager.simulate_move(
+        return pos in self.get_all_possible_moves() and Game_Manager.simulate_move(
             self.position, pos
-        ):
-            return True
-        return False
+        )
+
+    @abstractmethod
+    def get_notation_move(self, pos: str) -> str:
+        pass
 
     @abstractmethod
     def __str__(self) -> str:

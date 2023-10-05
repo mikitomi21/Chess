@@ -131,5 +131,16 @@ class King(Piece, ABC):
             return True
         return False
 
+    def get_notation_move(self, pos: str):
+        if not self.moved and isinstance(self.board.get_square(pos).piece, Rook):
+            return "O-O-O" if pos[0] == "a" else "O-O"
+
+        notation = "K"
+        if self.board.get_square(pos).piece:
+            notation += "x"
+        notation += pos
+
+        return notation
+
     def __str__(self) -> str:
         return "King"

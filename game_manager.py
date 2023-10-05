@@ -94,17 +94,21 @@ class Game_Manager:
         if cls.selected_piece.can_move(pos) and cls.simulate_move(
             cls.get_selected_piece().get_position(), pos
         ):
+            notation = cls.selected_piece.get_notation_move(pos)
             cls.selected_piece.move(pos)
             cls.board.draw_pieces([square, cls.selected_square])
             cls.set_selected_piece(None)
             cls.next_player()
-            cls.update_check_status()
-            if cls.is_check:
-                print("Check")
-            if cls.check_mat():
-                print("Mate")
 
-            cls.notation_table.save_move_to_file(pos)
+            cls.update_check_status()
+            if cls.check_mat():
+                notation += "#"
+                print("Mate")
+            elif cls.is_check:
+                notation += "+"
+                print("Check")
+
+            cls.notation_table.save_move_to_file(notation)
             cls.notation_table.print_moves()
 
         else:
