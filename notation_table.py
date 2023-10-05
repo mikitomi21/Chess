@@ -3,7 +3,7 @@ import os
 from constants import *
 
 
-class Notation_Table:
+class NotationTable:
     def __init__(
         self,
         root: tk.Tk,
@@ -32,12 +32,13 @@ class Notation_Table:
         with open(DIR_GAMES + self.file_name, "r") as file:
             print(file.read())
 
-    def get_new_name_of_file(self) -> str:
+    @staticmethod
+    def get_new_name_of_file() -> str:
         last_game = os.listdir("games/")[-1]
         new_game = (
             str(int(last_game[:EXTENSION]) + 1) + ".txt" if last_game else "00000.txt"
         )
-        while len(new_game) < LENGHT_OF_NAME_OF_FILE:
+        while len(new_game) < LENGTH_OF_NAME_OF_FILE:
             new_game = "0" + new_game
 
         with open(DIR_GAMES + new_game, "w"):

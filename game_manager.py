@@ -1,7 +1,7 @@
 import copy
 from constants import *
 from board import Board, Square
-from notation_table import Notation_Table
+from notation_table import NotationTable
 
 from chess_pieces.piece import Piece
 from chess_pieces.bishop import Bishop
@@ -12,7 +12,7 @@ from chess_pieces.queen import Queen
 from chess_pieces.rook import Rook
 
 
-class Game_Manager:
+class GameManager:
     board: Board = None
     current_player = PLAYER_WHITE
     selected_piece: Piece = None
@@ -57,7 +57,7 @@ class Game_Manager:
 
     @classmethod
     def create_notation_table(cls, root, canvas):
-        cls.notation_table = Notation_Table(root, canvas)
+        cls.notation_table = NotationTable(root, canvas)
 
     @classmethod
     def back_to_the_previous_setup(
@@ -151,19 +151,17 @@ class Game_Manager:
 
     @classmethod
     def update_check_status(cls) -> None:
-        pieces = Game_Manager.get_player_pieces(not cls.current_player)
-        king = Game_Manager.get_king(cls.current_player)
+        pieces = GameManager.get_player_pieces(not cls.current_player)
+        king = GameManager.get_king(cls.current_player)
         all_possible_moves = []
         for piece in pieces:
             all_possible_moves.extend(piece.get_all_possible_moves())
         cls.is_check = king.position in all_possible_moves
 
     @classmethod
-    def check_mat(cls) -> None:
+    def check_mat(cls) -> bool:
         if not cls.is_check:
             return False
-        king = Game_Manager.get_king(cls.current_player)
+        king = GameManager.get_king(cls.current_player)
         possible_moves = king.remove_mating_moves(king.get_all_possible_moves())
-        if len(possible_moves) == 0:
-            return True
-        return False
+        return len(possible_moves) == 0

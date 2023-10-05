@@ -80,7 +80,7 @@ class Bishop(Piece, ABC):
 
         return possible_moves
 
-    def get_notation_move(self, pos: str):
+    def get_notation_move(self, pos: str) -> str:
         notation = "B"
         if self.board.get_square(pos).piece:
             notation += "x"

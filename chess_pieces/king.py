@@ -47,10 +47,8 @@ class King(Piece, ABC):
 
         for i in range(len(x_pos)):
             if (
-                y + y_pos[i] < SIZE_OF_BOARD
-                and y + y_pos[i] >= 0
-                and x + x_pos[i] < SIZE_OF_BOARD
-                and x + x_pos[i] >= 0
+                SIZE_OF_BOARD > y + y_pos[i] >= 0
+                and SIZE_OF_BOARD > x + x_pos[i] >= 0
                 and (
                     self.board.get_square_ints(y + y_pos[i], x + x_pos[i]).piece is None
                     or self.board.get_square_ints(
@@ -131,7 +129,7 @@ class King(Piece, ABC):
             return True
         return False
 
-    def get_notation_move(self, pos: str):
+    def get_notation_move(self, pos: str) -> str:
         if not self.moved and isinstance(self.board.get_square(pos).piece, Rook):
             return "O-O-O" if pos[0] == "a" else "O-O"
 

@@ -1,6 +1,6 @@
 import tkinter as tk
-from game_manager import Game_Manager
-from clock_manager import Clock_Manager
+from game_manager import GameManager
+from clock_manager import ClockManager
 from constants import *
 
 
@@ -17,12 +17,12 @@ def start_game(root: tk.Tk) -> None:
     canvas = tk.Canvas(root, width=WIDTH_APP, height=HEIGHT_APP)
     canvas.pack()
 
-    Clock_Manager.create_timer(root, canvas)
+    ClockManager.create_timer(root, canvas)
     # Clock_Manager.create_notation_table(root, canvas)
 
-    Game_Manager.create_board(root, canvas)
-    Game_Manager.create_notation_table(root, canvas)
-    Game_Manager.set_start_positions()
+    GameManager.create_board(root, canvas)
+    GameManager.create_notation_table(root, canvas)
+    GameManager.set_start_positions()
 
     root.mainloop()
 

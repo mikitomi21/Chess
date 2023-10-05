@@ -124,7 +124,7 @@ class Queen(Piece, ABC):
 
         return possible_moves
 
-    def get_notation_move(self, pos: str):
+    def get_notation_move(self, pos: str) -> str:
         notation = "Q"
         if self.board.get_square(pos).piece:
             notation += "x"

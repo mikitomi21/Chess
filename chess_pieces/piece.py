@@ -11,11 +11,11 @@ class Piece(ABC):
         self.notation_table = notation_table
 
     def remove_mating_moves(self, all_possible_moves):
-        from game_manager import Game_Manager
+        from game_manager import GameManager
 
         available_moves = []
         for move in all_possible_moves:
-            if Game_Manager.simulate_move(self.position, move):
+            if GameManager.simulate_move(self.position, move):
                 available_moves.append(move)
         return available_moves
 
@@ -36,9 +36,9 @@ class Piece(ABC):
         self.position = position
 
     def can_move(self, pos: str) -> bool:
-        from game_manager import Game_Manager
+        from game_manager import GameManager
 
-        return pos in self.get_all_possible_moves() and Game_Manager.simulate_move(
+        return pos in self.get_all_possible_moves() and GameManager.simulate_move(
             self.position, pos
         )
 

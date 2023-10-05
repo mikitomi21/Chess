@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 from point import Point
 
 
-class Cirle:
+class Circle:
     def __init__(self, canvas: tk.Canvas, y, x, square):
         self.canvas = canvas
         self.y = y
@@ -16,10 +16,10 @@ class Cirle:
 
     def create_oval(self) -> None:
         circle = self.canvas.create_oval(
-            START_X + LENGHT_OF_SQUARE * self.x + SIZE_OF_CIRCLE,
-            START_Y + LENGHT_OF_SQUARE * self.y + SIZE_OF_CIRCLE,
-            START_X + LENGHT_OF_SQUARE * (self.x + 1) - SIZE_OF_CIRCLE,
-            START_Y + LENGHT_OF_SQUARE * (self.y + 1) - SIZE_OF_CIRCLE,
+            START_X + LENGTH_OF_SQUARE * self.x + SIZE_OF_CIRCLE,
+            START_Y + LENGTH_OF_SQUARE * self.y + SIZE_OF_CIRCLE,
+            START_X + LENGTH_OF_SQUARE * (self.x + 1) - SIZE_OF_CIRCLE,
+            START_Y + LENGTH_OF_SQUARE * (self.y + 1) - SIZE_OF_CIRCLE,
             fill="red",
         )
         self.canvas.tag_bind(circle, "<Button-1>", self.square.click_piece)
@@ -42,45 +42,45 @@ class Square:
         self.draw_image()
 
     def draw_square(self):
-        x1 = START_X + LENGHT_OF_SQUARE * self.row
-        y1 = START_Y + LENGHT_OF_SQUARE * self.col
-        x2 = START_X + LENGHT_OF_SQUARE * (self.row + 1)
-        y2 = START_Y + LENGHT_OF_SQUARE * (self.col + 1)
+        x1 = START_X + LENGTH_OF_SQUARE * self.row
+        y1 = START_Y + LENGTH_OF_SQUARE * self.col
+        x2 = START_X + LENGTH_OF_SQUARE * (self.row + 1)
+        y2 = START_Y + LENGTH_OF_SQUARE * (self.col + 1)
 
         self.rectangle = self.canvas.create_rectangle(x1, y1, x2, y2, fill=self.color)
         self.canvas.tag_bind(self.rectangle, "<Button-3>", self.click_square)
         self.canvas.tag_bind(self.rectangle, "<Button-1>", self.click_piece)
 
     def show_possible_moves(self, piece):
-        from game_manager import Game_Manager
+        from game_manager import GameManager
 
         possible_moves = piece.remove_mating_moves(piece.get_all_possible_moves())
         for pos in possible_moves:
             y, x = Point.get_position(pos)
-            Cirle(
+            Circle(
                 self.canvas,
                 y,
                 x,
-                Game_Manager.board.get_square(Point.get_position_int(y, x)),
+                GameManager.board.get_square(Point.get_position_int(y, x)),
             ).create_oval()
 
     def click_piece(self, event) -> None:
         # print(f"{chr(97 + self.row)}{8 - self.col}")
-        from game_manager import Game_Manager
+        from game_manager import GameManager
 
-        Game_Manager.board.draw_board()
+        GameManager.board.draw_board()
 
-        if self.piece and self.piece.player == Game_Manager.get_player():
+        if self.piece and self.piece.player == GameManager.get_player():
             self.show_possible_moves(self.piece)
 
         if (
-            Game_Manager.get_selected_piece() is None
-            or Game_Manager.get_player() != Game_Manager.selected_piece.player
+            GameManager.get_selected_piece() is None
+            or GameManager.get_player() != GameManager.selected_piece.player
         ):
-            Game_Manager.set_selected_piece(self.piece)
-            Game_Manager.set_selected_square(self)
+            GameManager.set_selected_piece(self.piece)
+            GameManager.set_selected_square(self)
         else:
-            Game_Manager.try_move_piece(self)
+            GameManager.try_move_piece(self)
 
     def load_image(self):
         image = Image.open(self.image_path)
@@ -88,8 +88,8 @@ class Square:
 
         self.photo = ImageTk.PhotoImage(image)
 
-        img_x = START_X + LENGHT_OF_SQUARE * self.row
-        img_y = START_Y + LENGHT_OF_SQUARE * self.col
+        img_x = START_X + LENGTH_OF_SQUARE * self.row
+        img_y = START_Y + LENGTH_OF_SQUARE * self.col
         self.image = self.canvas.create_image(
             img_x, img_y, image=self.photo, anchor=tk.NW
         )
@@ -142,7 +142,7 @@ class Board:
         self.canvas = canvas
         self.squares = self.create_squares()
 
-    def create_squares(self) -> list[Square]:
+    def create_squares(self) -> list[list[Square]]:
         squares = []
         for col in range(SIZE_OF_BOARD):
             row_of_squares = []
@@ -158,7 +158,8 @@ class Board:
                 square.draw_square()
                 square.draw_image()
 
-    def draw_pieces(self, squares: list[Square]) -> None:
+    @staticmethod
+    def draw_pieces(squares: list[Square]) -> None:
         for square in squares:
             square.draw_square()
             square.draw_image()

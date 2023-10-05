@@ -31,10 +31,8 @@ class Knight(Piece, ABC):
 
         for i in range(len(x_pos)):
             if (
-                y + y_pos[i] < SIZE_OF_BOARD
-                and y + y_pos[i] >= 0
-                and x + x_pos[i] < SIZE_OF_BOARD
-                and x + x_pos[i] >= 0
+                SIZE_OF_BOARD > y + y_pos[i] >= 0
+                and SIZE_OF_BOARD > x + x_pos[i] >= 0
                 and (
                     self.board.get_square_ints(y + y_pos[i], x + x_pos[i]).piece is None
                     or self.board.get_square_ints(
@@ -49,7 +47,7 @@ class Knight(Piece, ABC):
 
         return possible_moves
 
-    def get_notation_move(self, pos: str):
+    def get_notation_move(self, pos: str) -> str:
         notation = "N"
         if self.board.get_square(pos).piece:
             notation += "x"
