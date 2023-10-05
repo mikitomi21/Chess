@@ -4,10 +4,11 @@ from abc import ABC, abstractmethod
 
 class Piece(ABC):
     @abstractmethod
-    def __init__(self, position: str, player: int, board):
+    def __init__(self, position: str, player: int, board, notation_table):
         self.position = position
         self.player = player
         self.board = board
+        self.notation_table = notation_table
 
     def remove_mating_moves(self, all_possible_moves):
         from game_manager import Game_Manager
@@ -37,18 +38,22 @@ class Piece(ABC):
     def can_move(self, pos: str) -> bool:
         from game_manager import Game_Manager
 
-        if pos in self.get_all_possible_moves() and Game_Manager.simulate_move(
+        return pos in self.get_all_possible_moves() and Game_Manager.simulate_move(
             self.position, pos
-        ):
-            return True
-        return False
+        )
+
+    @abstractmethod
+    def get_notation_move(self, pos: str) -> str:
+        pass
 
     @abstractmethod
     def __str__(self) -> str:
         pass
 
     def __deepcopy__(self, memo):
-        new_piece = self.__class__(self.position, self.board, self.player)
+        new_piece = self.__class__(
+            self.position, self.board, self.player, self.notation_table
+        )
         new_piece.position = self.position
         new_piece.board = copy.deepcopy(self.board, memo)
         new_piece.player = self.player

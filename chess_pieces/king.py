@@ -24,18 +24,18 @@ class Castling_Options:
 
 
 class King(Piece, ABC):
-    def __init__(self, position: str, player: int, board):
-        super().__init__(position, player, board)
+    def __init__(self, position: str, player: int, board, notation_table):
+        super().__init__(position, player, board, notation_table)
         self.moved = False
         self.castling_check = Castling_Options()
         self.check = False
 
     @classmethod
-    def set_start_positions(cls, board) -> None:
-        board.get_square("e1").piece = King("e1", PLAYER_WHITE, board)
+    def set_start_positions(cls, board, notation_table) -> None:
+        board.get_square("e1").piece = King("e1", PLAYER_WHITE, board, notation_table)
         board.get_square("e1").set_image_path("img/white/king.png")
 
-        board.get_square("e8").piece = King("e8", PLAYER_BLACK, board)
+        board.get_square("e8").piece = King("e8", PLAYER_BLACK, board, notation_table)
         board.get_square("e8").set_image_path("img/black/king.png")
 
     def get_all_possible_moves(self) -> list[str]:
@@ -130,6 +130,17 @@ class King(Piece, ABC):
         if pos in self.get_all_possible_moves():
             return True
         return False
+
+    def get_notation_move(self, pos: str):
+        if not self.moved and isinstance(self.board.get_square(pos).piece, Rook):
+            return "O-O-O" if pos[0] == "a" else "O-O"
+
+        notation = "K"
+        if self.board.get_square(pos).piece:
+            notation += "x"
+        notation += pos
+
+        return notation
 
     def __str__(self) -> str:
         return "King"

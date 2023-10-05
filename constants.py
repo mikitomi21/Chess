@@ -33,3 +33,7 @@ NUMBER_OF_PAWNS = 8
 choose_piece = None
 
 SIZE_OF_CIRCLE = 30
+
+LENGHT_OF_NAME_OF_FILE = 9
+EXTENSION = -4
+DIR_GAMES = "games/"

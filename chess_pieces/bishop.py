@@ -7,19 +7,19 @@ from constants import *
 
 
 class Bishop(Piece, ABC):
-    def __init__(self, position: str, player: int, board):
-        super().__init__(position, player, board)
+    def __init__(self, position: str, player: int, board, notation_table):
+        super().__init__(position, player, board, notation_table)
 
     @classmethod
-    def set_start_positions(cls, board) -> None:
-        board.get_square("c1").piece = Bishop("c1", PLAYER_WHITE, board)
+    def set_start_positions(cls, board, notation_table) -> None:
+        board.get_square("c1").piece = Bishop("c1", PLAYER_WHITE, board, notation_table)
         board.get_square("c1").set_image_path("img/white/bishop.png")
-        board.get_square("f1").piece = Bishop("f1", PLAYER_WHITE, board)
+        board.get_square("f1").piece = Bishop("f1", PLAYER_WHITE, board, notation_table)
         board.get_square("f1").set_image_path("img/white/bishop.png")
 
-        board.get_square("c8").piece = Bishop("c8", PLAYER_BLACK, board)
+        board.get_square("c8").piece = Bishop("c8", PLAYER_BLACK, board, notation_table)
         board.get_square("c8").set_image_path("img/black/bishop.png")
-        board.get_square("f8").piece = Bishop("f8", PLAYER_BLACK, board)
+        board.get_square("f8").piece = Bishop("f8", PLAYER_BLACK, board, notation_table)
         board.get_square("f8").set_image_path("img/black/bishop.png")
 
     def get_all_possible_moves(self) -> list[str]:
@@ -79,6 +79,14 @@ class Bishop(Piece, ABC):
             possible_moves.append(Point.get_position_int(y + i, x - i))
 
         return possible_moves
+
+    def get_notation_move(self, pos: str):
+        notation = "B"
+        if self.board.get_square(pos).piece:
+            notation += "x"
+        notation += pos
+
+        return notation
 
     def __str__(self) -> str:
         return "Bishop"
