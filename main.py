@@ -18,9 +18,10 @@ def start_game(root: tk.Tk) -> None:
     canvas.pack()
 
     Clock_Manager.create_timer(root, canvas)
-    Clock_Manager.create_notation_table(root, canvas)
+    # Clock_Manager.create_notation_table(root, canvas)
 
     Game_Manager.create_board(root, canvas)
+    Game_Manager.create_notation_table(root, canvas)
     Game_Manager.set_start_positions()
 
     root.mainloop()

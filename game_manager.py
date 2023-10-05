@@ -1,6 +1,7 @@
 import copy
 from constants import *
 from board import Board, Square
+from notation_table import Notation_Table
 
 from chess_pieces.piece import Piece
 from chess_pieces.bishop import Bishop
@@ -17,6 +18,7 @@ class Game_Manager:
     selected_piece: Piece = None
     selected_square: Square = None
     is_check: bool = False
+    notation_table = None
 
     @classmethod
     def create_board(cls, root, canvas) -> None:
@@ -52,6 +54,10 @@ class Game_Manager:
     @classmethod
     def set_selected_square(cls, square) -> None:
         cls.selected_square = square
+
+    @classmethod
+    def create_notation_table(cls, root, canvas):
+        cls.notation_table = Notation_Table(root, canvas)
 
     @classmethod
     def back_to_the_previous_setup(
@@ -98,6 +104,9 @@ class Game_Manager:
             if cls.check_mat():
                 print("Mate")
 
+            cls.notation_table.save_move_to_file(pos)
+            cls.notation_table.print_moves()
+
         else:
             cls.set_selected_piece(square.piece)
             cls.set_selected_square(square)
@@ -111,12 +120,12 @@ class Game_Manager:
 
     @classmethod
     def set_start_positions(cls) -> None:
-        Bishop.set_start_positions(cls.board)
-        King.set_start_positions(cls.board)
-        Knight.set_start_positions(cls.board)
-        Pawn.set_start_positions(cls.board)
-        Queen.set_start_positions(cls.board)
-        Rook.set_start_positions(cls.board)
+        Bishop.set_start_positions(cls.board, cls.notation_table)
+        King.set_start_positions(cls.board, cls.notation_table)
+        Knight.set_start_positions(cls.board, cls.notation_table)
+        Pawn.set_start_positions(cls.board, cls.notation_table)
+        Queen.set_start_positions(cls.board, cls.notation_table)
+        Rook.set_start_positions(cls.board, cls.notation_table)
 
     @classmethod
     def get_player_pieces(cls, player: int) -> list[Piece]:

@@ -15,3 +15,4 @@ class Clock_Manager:
     @classmethod
     def create_notation_table(cls, root, canvas):
         cls.notation_table = Notation_Table(root, canvas)
+        # cls.notation_table.save_moves_to_file()

@@ -7,19 +7,23 @@ from constants import *
 
 
 class Pawn(Piece, ABC):
-    def __init__(self, position: str, player: int, board):
-        super().__init__(position, player, board)
+    def __init__(self, position: str, player: int, board, notation_table):
+        super().__init__(position, player, board, notation_table)
         self.moved = False
 
     @classmethod
-    def set_start_positions(cls, board) -> None:
+    def set_start_positions(cls, board, notation_table) -> None:
         for i in range(NUMBER_OF_PAWNS):
             pos_white = chr(i + 97) + "2"
             pos_black = chr(i + 97) + "7"
-            board.get_square(pos_white).piece = Pawn(pos_white, PLAYER_WHITE, board)
+            board.get_square(pos_white).piece = Pawn(
+                pos_white, PLAYER_WHITE, board, notation_table
+            )
             board.get_square(pos_white).set_image_path("img/white/pawn.png")
 
-            board.get_square(pos_black).piece = Pawn(pos_black, PLAYER_BLACK, board)
+            board.get_square(pos_black).piece = Pawn(
+                pos_black, PLAYER_BLACK, board, notation_table
+            )
             board.get_square(pos_black).set_image_path("img/black/pawn.png")
 
     def get_all_possible_moves(self) -> list[str]:
